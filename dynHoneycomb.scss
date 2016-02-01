@@ -1,0 +1,89 @@
+/* Honeycomb CSS */
+
+/* 
+		Math of regular hexagons (additional assumption: top and bottom edges are horizontal*):
+			width is outer radius * 2
+			height is inner radius * 2
+						
+			outer radius (or) can be calculated with the inner radius (ir)
+					 2 * ri	
+				or = -------    =  ir * ~ 1.1547
+					 sqrt(3)
+
+				<==>
+
+					 or * sqrt(3)	
+				ir = ------------ = or * ~0.866
+					      2
+					
+			Whereas
+				or == edge length of all edges and also half the width of the rectangular bounding box*!
+				Also because of this, it is the horizontal margin between the combs
+				ir == half of the height of our rectangular bounding box*!
+						
+			CONTINUE!!!
+			
+				
+*/
+
+$outerRadius:	100px;
+$innerRadius:	$outerRadius * 0.866;
+//$innerRadius:	100px;
+//$outerRadius:	$innerRadius * 1.1547;
+
+.honeycomb {
+	position: relative;
+	display: block;
+	width: 100%;
+}
+
+.combOuter {
+	height: $innerRadius * 2;
+	width: $outerRadius * 2;
+	pointer-events: none;
+	position: relative;
+	float: left;
+	overflow: hidden;
+	margin-right: $outerRadius;
+}
+
+.combOuter .innerClipClockwise .innerClipCounterClockwise > *,
+.combOuter .innerClipCounterClockwise .innerClipClockwise > *, {
+	/* Whatever is in the nest of the clipping boxes, it has to be centered and justified correctly! */
+	//height: $innerRadius * 2;
+	//width: $outerRadius * 2;
+	margin: 0 $outerRadius;
+	position: relative;
+	bottom: $outerRadius - $innerRadius;
+	
+	transform:rotate(60deg);
+	-ms-transform:rotate(60deg); /* IE 9 */
+	-webkit-transform:rotate(60deg); /* Safari and Chrome */
+}
+
+.combOuter > .innerClipClockwise,
+.combOuter > .innerClipCounterClockwise {
+	/* Wahtever is on the top level needs to be moved to the left, so the content sits 100% in .combOuter */
+	left: -$outerRadius;
+}
+
+.innerClipClockwise, .innerClipCounterClockwise {
+	height: $innerRadius * 2;
+	width: $outerRadius * 4; /* to be sure we have enough space and don't clip what we want */
+	background-color: transparent;
+	overflow: hidden;
+	position: absolute;
+	/*-webkit-backface-visibility:hidden;  Chrome anti-aliasing */
+}
+
+.innerClipClockwise {
+	transform:rotate(60deg);
+	-ms-transform:rotate(60deg); /* IE 9 */
+	-webkit-transform:rotate(60deg); /* Safari and Chrome */
+}
+
+.innerClipCounterClockwise {
+	transform:rotate(-120deg);
+	-ms-transform:rotate(-120deg); /* IE 9 */
+	-webkit-transform:rotate(-120deg); /* Safari and Chrome */
+}
